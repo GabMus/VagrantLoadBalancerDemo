@@ -14,5 +14,6 @@ Vagrant.configure("2") do |config|
     s.inline="apt-get update"
     s.inline="apt-get upgrade -y"
     s.inline="apt-get install nginx -y"
+    s.inline="echo -e \"upstream loadbalancer {\\n  server 11.0.0.2;\\n  server 11.0.0.3;\\n}\\n\\nserver {\\n  location / {\\n    proxy_pass http://loadbalancer;\\n  }\\n}\\n\" > /etc/nginx/sites-available/default"
   end
 end
