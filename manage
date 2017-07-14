@@ -1,0 +1,35 @@
+#!/bin/bash
+
+SESSION=$USER
+
+if [[ $1 == "start" ]]; then
+	tmux -2 new-session -d -s $SESSION
+	tmux split-window -h
+	tmux select-pane -t 0
+	tmux split-window -h
+	tmux select-pane -t 0
+	tmux send-keys "cd VagrantLoadBalancer; vagrant up; exit" C-m
+	tmux select-pane -t 1
+	tmux send-keys "cd VagrantT1; vagrant up; exit" C-m
+	tmux select-pane -t 2
+	tmux send-keys "cd VagrantT2; vagrant up; exit" C-m
+	tmux -2 attach-session -t $SESSION
+	xdg-open http://localhost:8080
+elif [[ $1 == "stop" ]]; then
+	tmux -2 new-session -d -s $SESSION
+	tmux split-window -h
+	tmux select-pane -t 0
+	tmux split-window -h
+	tmux select-pane -t 0
+	tmux send-keys "cd VagrantLoadBalancer; vagrant halt; exit" C-m
+	tmux select-pane -t 1
+	tmux send-keys "cd VagrantT1; vagrant halt; exit" C-m
+	tmux select-pane -t 2
+	tmux send-keys "cd VagrantT2; vagrant halt; exit" C-m
+	tmux -2 attach-session -t $SESSION
+else
+	echo "Invalid option. Syntax: ./manage [start|stop]"
+fi
+
+#cd VagrantLoadBalancer
+
